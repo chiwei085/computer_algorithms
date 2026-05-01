@@ -367,12 +367,13 @@
       parameters: ("T",),
     )[
       let $x <- "BST-Minimum"("root"(T))$\
+      let $r <- "right"(x)$\
+      if $r != "NIL"$:#i\
+      $"parent"(r) <- "parent"(x)$#d\
       if $x = "root"(T)$:#i\
-      $"root"(T) <- "right"(x)$\
+      $"root"(T) <- r$#d\
       else:#i\
-      $"left"("parent"(x)) <- "right"(x)$#d\
-      if $"right"(x) != "NIL"$:#i\
-      $"parent"("right"(x)) <- "parent"(x)$#d\
+      $"left"("parent"(x)) <- r$#d\
       return $x$
     ]
 
@@ -384,7 +385,7 @@
 
     Since $x$ is minimum, $"left"(x) = "NIL"$.
 
-    *Case 1:* $x = "root"(T)$. The algorithm sets $"root"(T) <- "right"(x)$. The BST order on $"subtree"("right"(x))$ is unchanged, so the remaining tree is still a BST.
+    *Case 1:* $x = "root"(T)$. Since $"parent"(x) = "NIL"$, if $r = "right"(x) != "NIL"$ then setting $"parent"(r) <- "parent"(x)$ makes $"parent"(r) = "NIL"$. The algorithm then sets $"root"(T) <- r$. The BST order on $"subtree"(r)$ is unchanged, so the remaining tree is still a BST.
 
     *Case 2:* $x != "root"(T)$. Then $x = "left"(p)$, so
 
@@ -398,7 +399,7 @@
       ("key"(x), "key"(p)).
     $
 
-    Therefore replacing $"left"(p)$ by $"right"(x)$ preserves BST order.
+    Therefore replacing $"left"(p)$ by $r = "right"(x)$ preserves BST order. If $r != "NIL"$, setting $"parent"(r) <- p$ preserves the parent pointers as well.
 
     In both cases, the remaining tree is a BST with $min(T)$ removed. Thus the algorithm correctly implements $mono("DELETE-MIN")$. $qed$
 
